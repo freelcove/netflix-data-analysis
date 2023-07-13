@@ -6,9 +6,6 @@ using System.Data.SqlClient;
 namespace Netflix_Analyzer
 {
 
-
-
-
     public class DBHelper
     {
         private static SqlConnection conn = new SqlConnection();
@@ -147,7 +144,7 @@ namespace Netflix_Analyzer
                 cmd.Parameters.AddWithValue("@p8", birth_date);
                 cmd.Parameters.AddWithValue("@p9", preferred_genre);
                 cmd.Parameters.AddWithValue("@p10", average_watch_time);
-                cmd.Parameters.AddWithValue("@p11", );
+                cmd.Parameters.AddWithValue("@p11", id);
                 cmd.CommandText = sqlcommand;
                 cmd.ExecuteNonQuery();
             }
