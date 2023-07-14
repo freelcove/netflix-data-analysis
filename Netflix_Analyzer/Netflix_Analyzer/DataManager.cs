@@ -64,6 +64,7 @@ namespace Netflix_Analyzer
         {
             try
             {
+                int count = 0;
                 DBHelper.selectQuery("Users");
                 Users.Clear();
                 foreach (DataRow item in DBHelper.dt.Rows)
@@ -76,18 +77,25 @@ namespace Netflix_Analyzer
                     int.TryParse(item["device"].ToString(), out int device);
                     int.TryParse(item["preferred_genre"].ToString(), out int genre);
                     int.TryParse(item["average_watch_time"].ToString(), out int average_watch_time);
+                    string[] join_date = item["join_date"].ToString().Split();
+                    string[] last_payment_date = item["last_payment_date"].ToString().Split();
+                    string[] birth_date = item["birth_date"].ToString().Split();
                     user.id = id;
                     user.subcription_type = subscription;
-                    user.join_date = DateTime.ParseExact(item["join_date"].ToString(), "d", new CultureInfo("en-US"));
-                    user.last_payment_date = DateTime.ParseExact(item["last_payment_date"].ToString(), "d", new CultureInfo("en-US"));
+                    user.join_date = DateTime.ParseExact(join_date[0], "yyyy-MM-dd", new CultureInfo("en-US"));
+                    user.last_payment_date = DateTime.ParseExact(last_payment_date[0], "yyyy-MM-dd", new CultureInfo("en-US"));
                     user.country = country;
                     user.gender = gender;
                     user.device = device;
-                    user.birth_date = DateTime.ParseExact(item["birth_date"].ToString(), "d", new CultureInfo("en-US"));
+                    user.birth_date = DateTime.ParseExact(birth_date[0], "yyyy-MM-dd", new CultureInfo("en-US"));
                     user.preferred_genre = genre;
                     user.avrage_watch_time = average_watch_time;
-
+                    count++;
                     Users.Add(user);
+                    if (count >100 )
+                    {
+                        break;
+                    }
                 }
             }
             catch (Exception e)
@@ -195,11 +203,13 @@ namespace Netflix_Analyzer
                 {
                     Country country = new Country();
                     int.TryParse(item["id"].ToString(), out int id);
+                    int.TryParse(item["population"].ToString(), out int population);
                     int.TryParse(item["gdp"].ToString(), out int gdp);
                     int.TryParse(item["gdp_per_capita"].ToString(), out int gdp_per_capita);
                     country.id = id;
                     country.name = item["name"].ToString();
                     country.region = item["region"].ToString();
+                    country.population = population;
                     country.gdp = gdp;
                     country.gdp_per_capita = gdp_per_capita;
                     Countries.Add(country);
@@ -211,19 +221,35 @@ namespace Netflix_Analyzer
                 printLog(e.StackTrace + "load_Countries");
             }
         }
+        public static void printLog(string contents)
+        {
+            //ParkingCarManager.exe랑 같은 경로에
+            //LogFolder라는 이름의 폴더가 없다면...
+            DirectoryInfo di = new DirectoryInfo("LogFolder");
+            if (di.Exists == false)
+            {
+                di.Create();//새로 만든다.
+            }
+            //@"LogFolder\ParkingHistory.txt"
+            //"LogFolder\\ParkingHistory.txt"
+            //true : appned 옵션을 true
+            //즉 새로운 텍스트가 나오면 덮어쓰지 않고
+            //뒤에다가 이어붙인다.
+            using (StreamWriter w = new StreamWriter
+                (@"LogFolder\Netflix_Analyzer.txt", true))
+            {
+                w.WriteLine(contents);
+            }
+        }
         //---------------------------- 이하 작업중 ----------------------------------------------
 
         //주차 출차용 Save
-        public static void Save(string ps,
-            string carNumber, string driverName,
-            string phoneNumber,
-            bool isRemove = false)
+        public static void Save(string ps, string carNumber, string driverName, string phoneNumber, bool isRemove = false)
         {
             try
             {
                 DBHelper.updateQuery
-                    (ps, carNumber, driverName, phoneNumber,
-                    isRemove);
+                    (ps, carNumber, driverName, phoneNumber, isRemove);
             }
             catch (Exception)
             {
@@ -271,25 +297,6 @@ namespace Netflix_Analyzer
                 return false;
             }
         }
-        public static void printLog(string contents)
-        {
-            //ParkingCarManager.exe랑 같은 경로에
-            //LogFolder라는 이름의 폴더가 없다면...
-            DirectoryInfo di = new DirectoryInfo("LogFolder");
-            if (di.Exists == false)
-            {
-                di.Create();//새로 만든다.
-            }
-            //@"LogFolder\ParkingHistory.txt"
-            //"LogFolder\\ParkingHistory.txt"
-            //true : appned 옵션을 true
-            //즉 새로운 텍스트가 나오면 덮어쓰지 않고
-            //뒤에다가 이어붙인다.
-            using (StreamWriter w = new StreamWriter
-                (@"LogFolder\Netflix_Analyzer.txt", true))
-            {
-                w.WriteLine(contents);
-            }
-        }
+
     }
 }

@@ -6,6 +6,9 @@ using System.Data.SqlClient;
 namespace Netflix_Analyzer
 {
 
+
+
+
     public class DBHelper
     {
         private static SqlConnection conn = new SqlConnection();
@@ -35,7 +38,7 @@ namespace Netflix_Analyzer
         //selectQuery(string ps="-1")
         //selectQuery(); ps = -1
         //selectQuery("aaa"); ps = aaa
-        public static void selectQuery(string table, string id = "-1")
+        public static void selectQuery(string table, int id = -1)
         {
             try
             {
@@ -43,7 +46,7 @@ namespace Netflix_Analyzer
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conn;
 
-                if (id.Equals("-1"))
+                if (id==-1)
                     cmd.CommandText = $"select * from {table}";
                 else
                     cmd.CommandText = $"select * from {table} where id='{id}'";
@@ -93,7 +96,7 @@ namespace Netflix_Analyzer
         }
 
         //Countries 테이블 업데이트용
-        public static void updateQuery(string table, int id, string name, string region, int gdp, int gdp_per_capita)
+        public static void updateQuery(string table, int id, string name, string region, int population, int gdp, int gdp_per_capita)
         {
             try
             {
@@ -102,10 +105,11 @@ namespace Netflix_Analyzer
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
                 string sqlcommand = "";
-                sqlcommand = "update @p1 set name = @p2, region = @p3, gdp = @p4, gdp_per_capita = @p5 where id = @p6";
+                sqlcommand = "update @p1 set name = @p2, region = @p3, population = @p7, gdp = @p4, gdp_per_capita = @p5 where id = @p6";
                 cmd.Parameters.AddWithValue("@p1", table);
                 cmd.Parameters.AddWithValue("@p2", name);
                 cmd.Parameters.AddWithValue("@p3", region);
+                cmd.Parameters.AddWithValue("@p7", population);
                 cmd.Parameters.AddWithValue("@p4", gdp);
                 cmd.Parameters.AddWithValue("@p5", gdp_per_capita);
                 cmd.Parameters.AddWithValue("@p6", id);

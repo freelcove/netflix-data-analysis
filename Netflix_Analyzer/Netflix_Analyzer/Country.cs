@@ -11,6 +11,7 @@ namespace Netflix_Analyzer
         public int id { get; set; }
         public string name { get; set; }
         public string region { get; set; }
+        public int population { get; set; }
         public int gdp { get; set; }
         public int gdp_per_capita { get; set; }
     }
