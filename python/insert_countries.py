@@ -18,8 +18,14 @@ cnxn = pyodbc.connect(conn_str)
 cursor = cnxn.cursor()
 
 # Insert DataFrame to Table
+# for index, row in df.iterrows():
+#     cursor.execute("INSERT INTO countries(id,name,region,population,gdp,[gdp_per_capita]) values(?,?,?,?,?,?)", 
+#                    row['id'], row['name'], row['region'], row['population'], row['gdp'], row['gdp_per_capita'])
+    
+# Update existing data in the Table
 for index, row in df.iterrows():
-    cursor.execute("INSERT INTO countries(id,name,region,population,gdp,[gdp_per_capita]) values(?,?,?,?,?,?)", 
-                   row['id'], row['name'], row['region'], row['population'], row['gdp'], row['gdp_per_capita'])
+    cursor.execute("UPDATE countries SET name=?, region=?, population=?, gdp=?, [gdp_per_capita]=? WHERE id=?", 
+                   row['name'], row['region'], row['population'], row['gdp'], row['gdp_per_capita'], row['id'])
+    
 cnxn.commit()
 cursor.close()

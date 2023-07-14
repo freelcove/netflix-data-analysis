@@ -1,9 +1,7 @@
 import pandas as pd
 import numpy as np
 from random import choices
-from datetime import datetime, timedelta
-from scipy.stats import beta
-from datetime import datetime as dt
+from datetime import datetime
 
 def generate_data(iteration):
     # Load the countries data
@@ -59,7 +57,7 @@ def generate_data(iteration):
     device = np.random.choice(range(1, 5), p=[0.7, 0.15, 0.1, 0.05], size=num_rows)
 
     # Define age groups and corresponding probabilities
-    age_groups = [13, 18, 25, 35, 50, 65, 100]  # The last group is for ages 65 and above
+    age_groups = [13, 18, 25, 35, 50, 65, 90]  # The last group is for ages 65 and above
     probabilities = [0.08, 0.15, 0.30, 0.25, 0.15, 0.07]
 
     # Generate a categorical series where each category represents an age group
@@ -106,7 +104,7 @@ def generate_data(iteration):
     df['birth_date'] = df['birth_date'].dt.date
 
     # Get the current datetime
-    current_datetime = dt.now().strftime("%Y%m%d%H%M%S")
+    current_datetime = datetime.now().strftime("%Y%m%d%H%M%S")
 
     # Save to CSV
     df.to_csv(f'data/generated_data_{current_datetime}_{iteration}.csv', encoding='utf-8', index=False)
