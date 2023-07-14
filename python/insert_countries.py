@@ -2,7 +2,7 @@ import pandas as pd
 import pyodbc
 
 # Load the data from CSV
-df = pd.read_csv('countries.csv')
+df = pd.read_csv('data/countries.csv')
 
 # Create a connection string
 conn_str = (

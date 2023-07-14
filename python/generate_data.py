@@ -7,10 +7,10 @@ from datetime import datetime as dt
 
 def generate_data(iteration):
     # Load the countries data
-    countries = pd.read_csv('countries.csv', encoding='utf-8')
+    countries = pd.read_csv('data/countries.csv', encoding='utf-8')
 
     # Load Netflix subscriber data
-    subscriber_data = pd.read_csv('subscriber_data.csv')
+    subscriber_data = pd.read_csv('data/subscriber_data.csv')
 
     # Exclude China and Russia
     countries = countries[(countries['name'] != 'China') & (countries['name'] != 'Russia')]
