@@ -80,9 +80,7 @@ def generate_data(iteration):
 
 
     # Subtract ages from join date to get birth date
-    birth_date = join_date - pd.to_timedelta(ages * 365, unit='D')
-
-
+    birth_date = (join_date - pd.to_timedelta(ages * 365, unit='D'))
 
     # Generate preferred_genre
     preferred_genre = np.random.choice(range(1, 11), p=[0.27, 0.15, 0.13, 0.11, 0.09, 0.07, 0.06, 0.05, 0.04, 0.03], size=num_rows)
@@ -103,6 +101,9 @@ def generate_data(iteration):
         'last_payment_date': last_payment_date,
         'device': device,
     })
+    
+    # Convert datetime to date
+    df['birth_date'] = df['birth_date'].dt.date
 
     # Get the current datetime
     current_datetime = dt.now().strftime("%Y%m%d%H%M%S")
@@ -112,5 +113,5 @@ def generate_data(iteration):
 
     print(f"Data saved as generated_data_{current_datetime}_{iteration}.csv")
     
-for i in range(20):
+for i in range(1):
     generate_data(i)
