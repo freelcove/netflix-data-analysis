@@ -84,17 +84,16 @@ namespace Netflix_Analyzer
                     int.TryParse(item["device"].ToString(), out int device);
                     int.TryParse(item["preferred_genre"].ToString(), out int genre);
                     int.TryParse(item["average_watch_time"].ToString(), out int average_watch_time);
-                    string[] join_date = item["join_date"].ToString().Split();
-                    string[] last_payment_date = item["last_payment_date"].ToString().Split();
-                    string[] birth_date = item["birth_date"].ToString().Split();
+
                     user.id = id;
+                    user.join_date = DateTime.ParseExact(Convert.ToDateTime(item["join_date"]).ToString("yyyy-MM-dd"), "yyyy-MM-dd", new CultureInfo("ko-KR"));
+                    user.last_payment_date = Convert.ToDateTime(item["last_payment_date"]);
+                    user.birth_date = Convert.ToDateTime(item["birth_date"]);
+                    Console.WriteLine(user.join_date);
                     user.subcription_type = subscription;
-                    user.join_date = DateTime.ParseExact(join_date[0], "yyyy-MM-dd", new CultureInfo("en-US"));
-                    user.last_payment_date = DateTime.ParseExact(last_payment_date[0], "yyyy-MM-dd", new CultureInfo("en-US"));
                     user.country = country;
                     user.gender = gender;
                     user.device = device;
-                    user.birth_date = DateTime.ParseExact(birth_date[0], "yyyy-MM-dd", new CultureInfo("en-US"));
                     user.preferred_genre = genre;
                     user.avrage_watch_time = average_watch_time;
                     count++;

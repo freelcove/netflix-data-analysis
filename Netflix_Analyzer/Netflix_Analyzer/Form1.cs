@@ -106,6 +106,20 @@ namespace Netflix_Analyzer
                         count = 0;
                         id = -1;
                     }
+
+                    /*
+                      try
+            {
+                DataTable dt = DBManager.GetData();
+                dataGridView.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+                     * 
+                     */
+
                     break;
             }
         }
