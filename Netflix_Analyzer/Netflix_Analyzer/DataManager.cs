@@ -84,12 +84,22 @@ namespace Netflix_Analyzer
                     int.TryParse(item["device"].ToString(), out int device);
                     int.TryParse(item["preferred_genre"].ToString(), out int genre);
                     int.TryParse(item["average_watch_time"].ToString(), out int average_watch_time);
+                    //string join_date = Convert.ToDateTime(item["join_date"]).ToString("yyyy-MM-dd");
+                    //string last_payment_date = Convert.ToDateTime(item["last_payment_date"]).ToString("yyyy-MM-dd");
+                    //string birth_date = Convert.ToDateTime(item["birth_date"]).ToString("yyyy-MM-dd");
+                    DateTime date1 = DateTime.Parse(item["join_date"].ToString());
+                    DateTime date2 = DateTime.Parse(item["last_payment_date"].ToString());
+                    DateTime date3 = DateTime.Parse(item["birth_date"].ToString());
 
+                    string join_date = date1.ToString("yyyy-MM-dd");
+                    string last_payment_date = date2.ToString("yyyy-MM-dd");
+                    string birth_date = date3.ToString("yyyy-MM-dd");
+                    Console.WriteLine(join_date);
                     user.id = id;
-                    user.join_date = DateTime.ParseExact(Convert.ToDateTime(item["join_date"]).ToString("yyyy-MM-dd"), "yyyy-MM-dd", new CultureInfo("ko-KR"));
-                    user.last_payment_date = Convert.ToDateTime(item["last_payment_date"]);
-                    user.birth_date = Convert.ToDateTime(item["birth_date"]);
-                    Console.WriteLine(user.join_date);
+                    user.join_date = DateTime.ParseExact(join_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    user.last_payment_date = DateTime.ParseExact(last_payment_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    user.birth_date = DateTime.ParseExact(birth_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    //Console.WriteLine(user.join_date);
                     user.subcription_type = subscription;
                     user.country = country;
                     user.gender = gender;
