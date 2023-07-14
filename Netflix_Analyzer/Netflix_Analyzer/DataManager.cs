@@ -31,27 +31,27 @@ namespace Netflix_Analyzer
             LoadUsers();
         }
         //선택 테이블 부르기
-        public static void Load(string table)
+        public static void Load(string table, int selectId = -1, string filter = "=")
         {
             switch (table)
             {
                 case "Countries":
-                    LoadCountries();
+                    LoadCountries(selectId, filter);
                     break;
                 case "Devices":
-                    LoadDevices();
+                    LoadDevices(selectId, filter);
                     break;
                 case "Genders":
-                    LoadGenders();
+                    LoadGenders(selectId, filter);
                     break;
                 case "Genres":
-                    LoadGenres();
+                    LoadGenres(selectId, filter);
                     break;
                 case "Subscription_Types":
-                    LoadSubscription();
+                    LoadSubscription(selectId, filter);
                     break;
                 case "Users":
-                    LoadUsers();
+                    LoadUsers(selectId, filter);
                     break;
                 default:
                     System.Windows.Forms.MessageBox.Show(table);
@@ -60,12 +60,19 @@ namespace Netflix_Analyzer
         }
 
         //Users 테이블 데이터 불러오기
-        private static void LoadUsers()
+        private static void LoadUsers(int selectId = -1, string filter = "=")
         {
             try
             {
                 int count = 0;
-                DBHelper.selectQuery("Users");
+                if (selectId != -1)
+                {
+                    DBHelper.selectQuery("Users", selectId, filter);
+                }
+                else
+                {
+                    DBHelper.selectQuery("Users");
+                }
                 Users.Clear();
                 foreach (DataRow item in DBHelper.dt.Rows)
                 {
@@ -105,11 +112,19 @@ namespace Netflix_Analyzer
             }
         }
 
-        private static void LoadSubscription()
+        private static void LoadSubscription(int selectId = -1, string filter = "=")
         {
             try
             {
-                DBHelper.selectQuery("Subscription_Types");
+                if (selectId != -1)
+                {
+                    DBHelper.selectQuery("Subscription_Types", selectId, filter);
+                }
+                else
+                {
+                    DBHelper.selectQuery("Subscription_Types");
+                }
+
                 Subscription_Types.Clear();
                 foreach (DataRow item in DBHelper.dt.Rows)
                 {
@@ -127,11 +142,19 @@ namespace Netflix_Analyzer
             }
         }
 
-        private static void LoadGenres()
+        private static void LoadGenres(int selectId = -1, string filter = "=")
         {
             try
             {
-                DBHelper.selectQuery("Genres");
+                if (selectId != -1)
+                {
+                    DBHelper.selectQuery("Genres", selectId, filter);
+                }
+                else
+                {
+                    DBHelper.selectQuery("Genres");
+                }
+
                 Genres.Clear();
                 foreach (DataRow item in DBHelper.dt.Rows)
                 {
@@ -149,11 +172,19 @@ namespace Netflix_Analyzer
             }
         }
 
-        private static void LoadGenders()
+        private static void LoadGenders(int selectId = -1, string filter = "=")
         {
             try
             {
-                DBHelper.selectQuery("Genders");
+                if (selectId != -1)
+                {
+                    DBHelper.selectQuery("Genders", selectId, filter);
+                }
+                else
+                {
+                    DBHelper.selectQuery("Genders");
+                }
+
                 Genders.Clear();
                 foreach (DataRow item in DBHelper.dt.Rows)
                 {
@@ -171,11 +202,19 @@ namespace Netflix_Analyzer
             }
         }
 
-        private static void LoadDevices()
+        private static void LoadDevices(int selectId = -1, string filter = "=")
         {
             try
             {
-                DBHelper.selectQuery("Devices");
+                if (selectId != -1)
+                {
+                    DBHelper.selectQuery("Devices", selectId, filter);
+                }
+                else
+                {
+                    DBHelper.selectQuery("Devices");
+                }
+
                 Devices.Clear();
                 foreach (DataRow item in DBHelper.dt.Rows)
                 {
@@ -193,11 +232,19 @@ namespace Netflix_Analyzer
             }
         }
 
-        private static void LoadCountries()
+        private static void LoadCountries(int selectId = -1, string filter = "=")
         {
             try
             {
-                DBHelper.selectQuery("Countries");
+                if (selectId != -1)
+                {
+                    DBHelper.selectQuery("Countries", selectId, filter);
+                }
+                else
+                {
+                    DBHelper.selectQuery("Countries");
+                }
+
                 Countries.Clear();
                 foreach (DataRow item in DBHelper.dt.Rows)
                 {

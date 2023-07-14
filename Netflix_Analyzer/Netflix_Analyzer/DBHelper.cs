@@ -38,7 +38,7 @@ namespace Netflix_Analyzer
         //selectQuery(string ps="-1")
         //selectQuery(); ps = -1
         //selectQuery("aaa"); ps = aaa
-        public static void selectQuery(string table, int id = -1)
+        public static void selectQuery(string table, int id = -1, string filter = "=")
         {
             try
             {
@@ -49,7 +49,8 @@ namespace Netflix_Analyzer
                 if (id==-1)
                     cmd.CommandText = $"select * from {table}";
                 else
-                    cmd.CommandText = $"select * from {table} where id='{id}'";
+                    cmd.CommandText = $"select * from {table} where id{filter}'{id}'";
+                Console.WriteLine(cmd.CommandText);
                 da = new SqlDataAdapter(cmd);
                 ds = new DataSet();
                 da.Fill(ds, table);
