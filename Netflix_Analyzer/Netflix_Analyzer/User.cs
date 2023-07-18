@@ -8,6 +8,7 @@ namespace Netflix_Analyzer
 {
     public class User
     {
+        public static List<string> columns { get; } = new List<string>() { "id", "subscription_type", "join_date", "last_payment_date", "country", "gender", "device", "birth_date", "preferred_genre", "average_watch_time" };
         public int id { get; set; }
         public int subcription_type { get; set; }
         public DateTime join_date { get; set; }
@@ -17,6 +18,6 @@ namespace Netflix_Analyzer
         public int device { get; set; }
         public DateTime birth_date { get; set; }
         public int preferred_genre { get; set; }
-        public int avrage_watch_time { get; set; }
+        public int average_watch_time { get; set; }
     }
 }

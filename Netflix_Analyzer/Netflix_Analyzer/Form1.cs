@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Netflix_Analyzer
@@ -14,15 +14,77 @@ namespace Netflix_Analyzer
         static int pageNum = 1;
         static List<int> ids = new List<int>() { -1 };
 
+        private BindingList<object> cmbList = new BindingList<object>();
 
         public Form1()
         {
             InitializeComponent();
-            dataGridViewSelect(tempTable, ref dataGridView1, ref groupBox1);
+            dataGridViewSelectDT(tempTable, ref dataGridView1, ref groupBox1);
+            comboBox1.Items.Clear();
+            comboBoxAddItems(ref comboBox1);
             comboBox1.Text = tempTable;
 
+            insertToolStripMenuItem.Click += (e,a) =>
+            {
+                Data_Edit data_Edit = new Data_Edit("insert");
+                data_Edit.ShowDialog();
+            };
+            updateToolStripMenuItem.Click += (e, a) =>
+            {
+                Data_Edit data_Edit = new Data_Edit("update");
+                data_Edit.ShowDialog();
+            };
+            deleteToolStripMenuItem.Click += (e, a) =>
+            {
+                Data_Edit data_Edit = new Data_Edit("delete");
+                data_Edit.ShowDialog();
+            };
 
         }
+
+        //ComboBox 데이터 입력
+        public void comboBoxAddItems(ref ComboBox comboBox)
+        {
+            comboBox.Items.Clear();
+            cmbList.Clear();
+            for (int i = 0; i < DataManager.Tables.Count; i++)
+            {
+                cmbList.Add(new { Display = DataManager.Tables[i], Value = DataManager.ColumnCount[i] });
+            }
+            comboBox.DataSource = cmbList;
+            comboBox.DisplayMember = "Display";
+            comboBox.ValueMember = "Value";
+        }
+
+        //DataGridView 출력(From DT)
+        public void dataGridViewSelectDT(string table, ref DataGridView dataGridView, ref GroupBox groupBox)
+        {
+            dataGridView.DataSource = "null";
+            groupBox.Text = table;
+            switch (table)
+            {
+                case "Countries":
+                    dataGridView.DataSource = DataManager.CountriesDT;
+                    break;
+                case "Devices":
+                    dataGridView.DataSource = DataManager.DevicesDT;
+                    break;
+                case "Genders":
+                    dataGridView.DataSource = DataManager.GendersDT;
+                    break;
+                case "Genres":
+                    dataGridView.DataSource = DataManager.GenresDT;
+                    break;
+                case "Subscription_Types":
+                    dataGridView.DataSource = DataManager.Subscription_TypesDT;
+                    break;
+                case "Users":
+                    dataGridView.DataSource = DataManager.UsersDT;
+                    break;
+            }
+        }
+
+        //DataGridView 출력(From List)
         public void dataGridViewSelect(string table, ref DataGridView dataGridView, ref GroupBox groupBox)
         {
             dataGridView.DataSource = "null";
@@ -106,27 +168,13 @@ namespace Netflix_Analyzer
                         count = 0;
                         id = -1;
                     }
-
-                    /*
-                      try
-            {
-                DataTable dt = DBManager.GetData();
-                dataGridView.DataSource = dt;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}");
-            }
-                     * 
-                     */
-
                     break;
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string table = comboBox1.Text;
+            string table = (comboBox1.SelectedItem as dynamic).Display;
             if (tempTable.Equals(table))
             {
 
@@ -139,14 +187,12 @@ namespace Netflix_Analyzer
                 ids.Clear();
                 ids.Add(-1);
                 tempTable = table;
-                DataManager.Load(tempTable);
+                DataManager.LoadDT(tempTable);
             }
-            dataGridViewSelect(table, ref dataGridView1, ref groupBox1);
+            dataGridViewSelectDT(table, ref dataGridView1, ref groupBox1);
 
             groupBox2.Controls.Clear();
             createButton();
-
-
         }
 
         private void createButton()
@@ -158,9 +204,9 @@ namespace Netflix_Analyzer
                 button.Text = "이전 페이지";
                 button.Click += (s, a) =>
                 {
-                    DataManager.Load(tempTable, ids[--pageNum-1], ">");
+                    DataManager.Load(tempTable, ids[--pageNum - 1], ">");
                     ids.RemoveAt(pageNum);
-                    dataGridViewSelect(tempTable, ref dataGridView1, ref groupBox1);
+                    dataGridViewSelectDT(tempTable, ref dataGridView1, ref groupBox1);
                     button1_Click(s, a);
 
                 };
@@ -178,7 +224,7 @@ namespace Netflix_Analyzer
                     ids.Add(id);
                     pageNum++;
                     DataManager.Load(tempTable, id, ">");
-                    dataGridViewSelect(tempTable, ref dataGridView1, ref groupBox1);
+                    dataGridViewSelectDT(tempTable, ref dataGridView1, ref groupBox1);
                     button1_Click(s, a);
                 };
                 button1.Location = new Point(147, 20);
@@ -186,9 +232,6 @@ namespace Netflix_Analyzer
                 groupBox2.Controls.Add(button1);
             }
         }
-
-
-
 
 
     }

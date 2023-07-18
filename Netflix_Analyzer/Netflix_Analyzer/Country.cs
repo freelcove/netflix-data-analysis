@@ -8,6 +8,8 @@ namespace Netflix_Analyzer
 {
     public class Country
     {
+        public static List<string> columns { get; } = new List<string>() { "id", "name", "region", "population", "gdp(per 1,000)", "gdp_per_capita" };
+
         public int id { get; set; }
         public string name { get; set; }
         public string region { get; set; }

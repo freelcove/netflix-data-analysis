@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Runtime.Remoting.Contexts;
 
 namespace Netflix_Analyzer
 {
@@ -14,13 +15,42 @@ namespace Netflix_Analyzer
         public static List<Gender> Genders = new List<Gender>();
         public static List<Genre> Genres = new List<Genre>();
         public static List<Subscription_Type> Subscription_Types = new List<Subscription_Type>();
-        private static List<string> Tables = new List<string>() { "Countries", "Devices", "Genders", "Genres", "Subscription_Types", "Users" };
+        public static DataTable UsersDT = new DataTable();
+        public static DataTable CountriesDT = new DataTable();
+        public static DataTable DevicesDT = new DataTable();
+        public static DataTable GendersDT = new DataTable();
+        public static DataTable GenresDT = new DataTable();
+        public static DataTable Subscription_TypesDT = new DataTable();
+        public static Dictionary<int,Country> CountriesDIC = new Dictionary<int, Country>();
+        public static Dictionary<int,Device> DevicesDIC = new Dictionary<int, Device>();
+        public static Dictionary<int,Gender> GendersDIC = new Dictionary<int, Gender>();
+        public static Dictionary<int,Genre> GenresDIC = new Dictionary<int, Genre>();
+        public static Dictionary<int,Subscription_Type> Subscription_TypesDIC = new Dictionary<int, Subscription_Type>();
+
+        public static List<string> Tables = new List<string>() { "Countries", "Devices", "Genders", "Genres", "Subscription_Types", "Users" };
+        public static List<int> ColumnCount = new List<int>() { 0, 0, 0, 0, 0, 0 };
 
         static DataManager()
         {
+            LoadDT();
             Load();
         }
-        //전체 테이블 불러오기
+
+        //전체 테이블 불러오기(DT)
+        public static void LoadDT()
+        {
+            for(int i = 0; i<Tables.Count; i++)
+            {
+                ColumnCount[i] = DBHelper.countColumn(Tables[i]);
+            }
+            LoadCountriesDT();
+            LoadDevicesDT();
+            LoadGendersDT();
+            LoadGenresDT();
+            LoadSubscriptionDT();
+            LoadUsersDT();
+        }
+        //전체 테이블 불러오기(List)
         public static void Load()
         {
             LoadCountries();
@@ -28,9 +58,38 @@ namespace Netflix_Analyzer
             LoadGenders();
             LoadGenres();
             LoadSubscription();
-            LoadUsers();
+            //LoadUsers();
         }
-        //선택 테이블 부르기
+
+        //선택 테이블 부르기(DT)
+        public static void LoadDT(string table, int selectId = -1, string filter = "=")
+        {
+            switch (table)
+            {
+                case "Countries":
+                    LoadCountriesDT(selectId, filter);
+                    break;
+                case "Devices":
+                    LoadDevicesDT(selectId, filter);
+                    break;
+                case "Genders":
+                    LoadGendersDT(selectId, filter);
+                    break;
+                case "Genres":
+                    LoadGenresDT(selectId, filter);
+                    break;
+                case "Subscription_Types":
+                    LoadSubscriptionDT(selectId, filter);
+                    break;
+                case "Users":
+                    LoadUsersDT(selectId, filter);
+                    break;
+                default:
+                    System.Windows.Forms.MessageBox.Show(table);
+                    break;
+            }
+        }
+        //선택 테이블 부르기(List)
         public static void Load(string table, int selectId = -1, string filter = "=")
         {
             switch (table)
@@ -59,7 +118,140 @@ namespace Netflix_Analyzer
             }
         }
 
-        //Users 테이블 데이터 불러오기
+
+        //Users 테이블 데이터 불러오기(DT)
+        private static void LoadUsersDT(int selectId = -1, string filter = "=")
+        {
+            try
+            {
+                UsersDT.Clear();
+                if (selectId != -1)
+                {
+                    UsersDT = DBHelper.selectQueryDT("Users", selectId, filter);
+                }
+                else
+                {
+                    UsersDT = DBHelper.selectQueryDT("Users");
+                }
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message);
+                printLog(e.StackTrace + "load_UsersDT");
+            }
+        }
+
+        //Subscription_Types 테이블 데이터 불러오기(DT)
+        private static void LoadSubscriptionDT(int selectId = -1, string filter = "=")
+        {
+            try
+            {
+                Subscription_TypesDT.Clear();
+                if (selectId != -1)
+                {
+                    Subscription_TypesDT = DBHelper.selectQueryDT("Subscription_Types", selectId, filter);
+                }
+                else
+                {
+                    Subscription_TypesDT = DBHelper.selectQueryDT("Subscription_Types");
+                }
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message);
+                printLog(e.StackTrace + "load_Subscription_TypesDT");
+            }
+        }
+
+        //Genres 테이블 데이터 불러오기(DT)
+        private static void LoadGenresDT(int selectId = -1, string filter = "=")
+        {
+            try
+            {
+                GenresDT.Clear();
+                if (selectId != -1)
+                {
+                    GenresDT = DBHelper.selectQueryDT("Genres", selectId, filter);
+                }
+                else
+                {
+                    GenresDT = DBHelper.selectQueryDT("Genres");
+                }
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message);
+                printLog(e.StackTrace + "load_GenresDT");
+            }
+        }
+
+        //Genders 테이블 데이터 불러오기(DT)
+        private static void LoadGendersDT(int selectId = -1, string filter = "=")
+        {
+            try
+            {
+                GendersDT.Clear();
+                if (selectId != -1)
+                {
+                    GendersDT = DBHelper.selectQueryDT("Genders", selectId, filter);
+                }
+                else
+                {
+                    GendersDT = DBHelper.selectQueryDT("Genders");
+                }
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message);
+                printLog(e.StackTrace + "load_GendersDT");
+            }
+        }
+
+        //Devices 테이블 데이터 불러오기(DT)
+        private static void LoadDevicesDT(int selectId = -1, string filter = "=")
+        {
+            try
+            {
+                DevicesDT.Clear();
+                if (selectId != -1)
+                {
+                    DevicesDT = DBHelper.selectQueryDT("Devices", selectId, filter);
+                }
+                else
+                {
+                    DevicesDT = DBHelper.selectQueryDT("Devices");
+                }
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message);
+                printLog(e.StackTrace + "load_DevicesDT");
+            }
+        }
+
+        //Countries 테이블 데이터 불러오기(DT)
+        private static void LoadCountriesDT(int selectId = -1, string filter = "=")
+        {
+            try
+            {
+                CountriesDT.Clear();
+                if (selectId != -1)
+                {
+                    CountriesDT = DBHelper.selectQueryDT("Countries", selectId, filter);
+                }
+                else
+                {
+                    CountriesDT = DBHelper.selectQueryDT("Countries");
+                }
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message);
+                printLog(e.StackTrace + "load_CountriesDT");
+            }
+        }
+
+        //Users 테이블 데이터 불러오기(List)
         private static void LoadUsers(int selectId = -1, string filter = "=")
         {
             try
@@ -84,9 +276,10 @@ namespace Netflix_Analyzer
                     int.TryParse(item["device"].ToString(), out int device);
                     int.TryParse(item["preferred_genre"].ToString(), out int genre);
                     int.TryParse(item["average_watch_time"].ToString(), out int average_watch_time);
-                    //string join_date = Convert.ToDateTime(item["join_date"]).ToString("yyyy-MM-dd");
-                    //string last_payment_date = Convert.ToDateTime(item["last_payment_date"]).ToString("yyyy-MM-dd");
-                    //string birth_date = Convert.ToDateTime(item["birth_date"]).ToString("yyyy-MM-dd");
+                    string join_date = Convert.ToDateTime(item["join_date"]).ToString("yyyy-MM-dd");
+                    string last_payment_date = Convert.ToDateTime(item["last_payment_date"]).ToString("yyyy-MM-dd");
+                    string birth_date = Convert.ToDateTime(item["birth_date"]).ToString("yyyy-MM-dd");
+                    /*
                     DateTime date1 = DateTime.Parse(item["join_date"].ToString());
                     DateTime date2 = DateTime.Parse(item["last_payment_date"].ToString());
                     DateTime date3 = DateTime.Parse(item["birth_date"].ToString());
@@ -94,6 +287,7 @@ namespace Netflix_Analyzer
                     string join_date = date1.ToString("yyyy-MM-dd");
                     string last_payment_date = date2.ToString("yyyy-MM-dd");
                     string birth_date = date3.ToString("yyyy-MM-dd");
+                    */
                     Console.WriteLine(join_date);
                     user.id = id;
                     user.join_date = DateTime.ParseExact(join_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
@@ -105,7 +299,7 @@ namespace Netflix_Analyzer
                     user.gender = gender;
                     user.device = device;
                     user.preferred_genre = genre;
-                    user.avrage_watch_time = average_watch_time;
+                    user.average_watch_time = average_watch_time;
                     count++;
                     Users.Add(user);
                     if (count >100 )
@@ -117,7 +311,7 @@ namespace Netflix_Analyzer
             catch (Exception e)
             {
                 System.Windows.Forms.MessageBox.Show(e.Message);
-                printLog(e.StackTrace + "load_Subscription_Types");
+                printLog(e.StackTrace + "load_Users");
             }
         }
 
@@ -135,6 +329,7 @@ namespace Netflix_Analyzer
                 }
 
                 Subscription_Types.Clear();
+                Subscription_TypesDIC.Clear();
                 foreach (DataRow item in DBHelper.dt.Rows)
                 {
                     Subscription_Type subscription = new Subscription_Type();
@@ -142,6 +337,8 @@ namespace Netflix_Analyzer
                     subscription.id = id;
                     subscription.name = item["name"].ToString();
                     Subscription_Types.Add(subscription);
+                    Subscription_TypesDIC.Add(subscription.id, subscription);
+
                 }
             }
             catch (Exception e)
@@ -165,6 +362,7 @@ namespace Netflix_Analyzer
                 }
 
                 Genres.Clear();
+                GenresDIC.Clear();
                 foreach (DataRow item in DBHelper.dt.Rows)
                 {
                     Genre genre = new Genre();
@@ -172,6 +370,8 @@ namespace Netflix_Analyzer
                     genre.id = id;
                     genre.name = item["name"].ToString();
                     Genres.Add(genre);
+                    GenresDIC.Add(genre.id, genre);
+
                 }
             }
             catch (Exception e)
@@ -195,6 +395,7 @@ namespace Netflix_Analyzer
                 }
 
                 Genders.Clear();
+                GendersDIC.Clear();
                 foreach (DataRow item in DBHelper.dt.Rows)
                 {
                     Gender gender = new Gender();
@@ -202,6 +403,8 @@ namespace Netflix_Analyzer
                     gender.id = id;
                     gender.name = item["name"].ToString();
                     Genders.Add(gender);
+                    GendersDIC.Add(gender.id, gender);
+
                 }
             }
             catch (Exception e)
@@ -225,6 +428,7 @@ namespace Netflix_Analyzer
                 }
 
                 Devices.Clear();
+                DevicesDIC.Clear();
                 foreach (DataRow item in DBHelper.dt.Rows)
                 {
                     Device device = new Device();
@@ -232,6 +436,7 @@ namespace Netflix_Analyzer
                     device.id = id;
                     device.name = item["name"].ToString();
                     Devices.Add(device);
+                    DevicesDIC.Add(device.id, device);
                 }
             }
             catch (Exception e)
@@ -255,6 +460,7 @@ namespace Netflix_Analyzer
                 }
 
                 Countries.Clear();
+                CountriesDIC.Clear();
                 foreach (DataRow item in DBHelper.dt.Rows)
                 {
                     Country country = new Country();
@@ -269,6 +475,7 @@ namespace Netflix_Analyzer
                     country.gdp = gdp;
                     country.gdp_per_capita = gdp_per_capita;
                     Countries.Add(country);
+                    CountriesDIC.Add(country.id, country);
                 }
             }
             catch (Exception e)
@@ -297,6 +504,63 @@ namespace Netflix_Analyzer
                 w.WriteLine(contents);
             }
         }
+
+        public static bool insertDB(string table , Dictionary<string, object> data , out string contents)
+        {
+            int.TryParse(data["id"].ToString(), out int id);
+
+            DBHelper.selectQuery(table, id);//해당 공간 유무 체크
+            contents = "";
+            return insertQuery(table, data, ref contents);
+
+        }
+
+        public static bool insertQuery(string table,  Dictionary<string, object> data , ref string contents)
+        {
+            if (DBHelper.dt.Rows.Count == 0)
+            {
+                DBHelper.insertQuery(table, data);
+                contents = $"{table}에 추가되었습니다.";
+                return true;
+            }
+            else
+            {
+                contents = $"{table}에 이미 있는 아이디입니다.";
+                return false;
+            }
+        }
+
+        public static bool deleteDB(string table, int id, out string contents)
+        {
+
+            DBHelper.selectQuery(table, id);//해당 공간 유무 체크
+            contents = "";
+            return deleteQuery(table, id, ref contents);
+
+        }
+
+        public static bool deleteQuery(string table, int id, ref string contents)
+        {
+            if (DBHelper.dt.Rows.Count != 0)
+            {
+                DBHelper.deleteQuery(table, id);
+                contents = $"{table}에 id = {id}인 데이터가 삭제되었습니다.";
+                return true;
+            }
+            else
+            {
+                contents = $"{table}에 id = {id}인 데이터는 없는 데이터입니다.";
+                return false;
+            }
+        }
+
+        public static void updateDB(string table, Dictionary<string, object> data, out string contents)
+        {
+            DBHelper.updateQuery(table, data);
+            contents = $"{table}에 id = {data["id"]}의 데이터가 수정되었습니다.";
+        }
+
+
         //---------------------------- 이하 작업중 ----------------------------------------------
 
         //주차 출차용 Save

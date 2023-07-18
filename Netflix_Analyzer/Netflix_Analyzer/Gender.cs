@@ -8,6 +8,7 @@ namespace Netflix_Analyzer
 {
     public class Gender
     {
+        public static List<string> columns { get; } = new List<string>() { "id", "name" };
         public int id { get; set; }
         public string name { get; set; }
     }
