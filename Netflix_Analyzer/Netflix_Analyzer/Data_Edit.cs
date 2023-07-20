@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Netflix_Analyzer
@@ -13,6 +9,7 @@ namespace Netflix_Analyzer
     public partial class Data_Edit : Form
     {
         static string motion;
+        static string currentTable;
         private static List<TextBox> txtList = new List<TextBox>();
         private static List<DateTimePicker> dateList = new List<DateTimePicker>();
         private static List<ComboBox> cmbList = new List<ComboBox>();
@@ -20,9 +17,11 @@ namespace Netflix_Analyzer
         public Data_Edit(string control)
         {
             InitializeComponent();
+
             List<string> tables = DataManager.Tables;
             motion = control;
-            this.Text = "Data Edit (" + control + ")";
+            currentTable = "Devices";
+            this.Text = "Data Edit (" + motion + ")";
             /*
             foreach (string table in tables)
             {
@@ -33,21 +32,21 @@ namespace Netflix_Analyzer
             Form1 form = new Form1();
             comboBox1.Items.Clear();
             form.comboBoxAddItems(ref comboBox1);
-            comboBox1.Text = "Devices";
+            comboBox1.Text = currentTable;
             form.dataGridViewSelectDT(comboBox1.Text, ref dataGridView1, ref groupBox2);
-            dataGridView1.CellClick += (e,a)=> { dataGridView1_CellContentClick(e,a); };
+            dataGridView1.CellClick += (e, a) => { dataGridView1_CellContentClick(e, a); };
             string table = (comboBox1.SelectedItem as dynamic).Display;
             int columnCount = (comboBox1.SelectedItem as dynamic).Value;
             addTextBox(table, columnCount);
-
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             string table = (comboBox1.SelectedItem as dynamic).Display;
+            currentTable = table;
             int columnCount = (comboBox1.SelectedItem as dynamic).Value;
             Form1 form = new Form1();
-            form.dataGridViewSelectDT(table, ref dataGridView1,ref groupBox2);
+            form.dataGridViewSelectDT(table, ref dataGridView1, ref groupBox2);
             addTextBox(table, columnCount);
         }
 
@@ -66,7 +65,8 @@ namespace Netflix_Analyzer
                     }
                     break;
                 case "country":
-                    foreach (var item in DataManager.Countries)
+
+                    foreach (var item in DataManager.CountriesSort)
                     {
                         comboBox.Items.Add(new { Display = item.name, Value = item.id });
                     }
@@ -78,13 +78,15 @@ namespace Netflix_Analyzer
                     }
                     break;
                 case "device":
-                    foreach (var item in DataManager.Devices)
+
+                    foreach (var item in DataManager.DevicesSort)
                     {
                         comboBox.Items.Add(new { Display = item.name, Value = item.id });
                     }
                     break;
                 case "preferred_genre":
-                    foreach (var item in DataManager.Genres)
+
+                    foreach (var item in DataManager.GenresSort)
                     {
                         comboBox.Items.Add(new { Display = item.name, Value = item.id });
                     }
@@ -96,6 +98,77 @@ namespace Netflix_Analyzer
 
         }
 
+        private void RowFind()
+        {
+            bool isNotFind = true;
+
+            int.TryParse(txtList[0].Text, out int value);
+            int start = value;
+            int count = dataGridView1.Rows.Count;
+            if (start < 10000)
+            {
+                start = 0;
+            }
+            else
+            {
+                start /= 10000;
+                start *= 10000;
+            }
+            if (count > start + 10000)
+            {
+                count = start + 10000;
+            }
+
+            for (int i = start; i < count; i++)
+            {
+                DataGridViewRow dataRow = dataGridView1.Rows[i];
+                int targetColumnIndex = 0;
+
+                if (dataRow.Cells[targetColumnIndex].Value == null)
+                    continue;
+
+
+                if (dataRow.Cells[targetColumnIndex].Value.ToString() == txtList[0].Text)
+                {
+                    isNotFind = false;
+                    dataRow.Selected = true;
+                    dataGridView1.CurrentCell = dataGridView1.Rows[int.Parse(dataRow.Index.ToString())].Cells[0];
+                    setTextBox();
+                    break;
+                }
+            }
+            if (isNotFind)
+            {
+                foreach (DataGridViewRow dataRow in dataGridView1.Rows)
+                {
+
+                    // 비교할 열의 인덱스 (여기에서는 첫 번째 열을 가정하겠습니다)
+                    int targetColumnIndex = 0;
+
+                    // DataGridView에 행이 없는 경우 처리
+                    if (dataRow.Cells[targetColumnIndex].Value == null)
+                        continue;
+
+
+                    // DataGridView의 해당 셀의 값과 찾을 값이 일치하는지 확인
+                    if (dataRow.Cells[targetColumnIndex].Value.ToString() == txtList[0].Text)
+                    {
+                        // 행을 선택하도록 설정
+                        isNotFind=false;
+                        dataRow.Selected = true;
+                        dataGridView1.CurrentCell = dataGridView1.Rows[int.Parse(dataRow.Index.ToString())].Cells[0];
+                        //dataRow.Cells[targetColumnIndex].Selected = true;
+                        setTextBox();
+                        break; // 원하는 행을 찾았으므로 루프를 종료합니다.
+                    }
+                }
+            }
+            if (isNotFind)
+            {
+                MessageBox.Show($"{value}는 없는 ID 입니다.");
+            }
+
+        }
         private void addUserTextBox(string table)
         {
             groupBox1.Controls.Clear();
@@ -118,11 +191,22 @@ namespace Netflix_Analyzer
                 }
                 if (item.Equals("id") || item.Equals("average_watch_time"))
                 {
-                    
+
                     TextBox textBox = new TextBox();
-                    if (motion.Equals("insert"))
+                    if (motion.Equals("insert") && item.Equals("id"))
                     {
                         textBox.Enabled = false;
+                    }
+                    if (item.Equals("id") && (motion.Equals("update") || motion.Equals("delete")))
+                    {
+
+                        textBox.KeyDown += (o, e) =>
+                        {
+                            if (e.KeyCode == Keys.Enter)
+                            {
+                                RowFind();
+                            };
+                        };
                     }
                     textBox.Name = "tb" + item;
                     textBox.Location = textboxlocation;
@@ -180,7 +264,7 @@ namespace Netflix_Analyzer
                     Label label = new Label();
                     label.Name = "lbl" + item;
                     label.Text = item;
-                    if (motion.Equals("update")&&item.Equals("id"))
+                    if (motion.Equals("update") && item.Equals("id"))
                     {
                         label.Text += " (아이디 수정불가)";
                     }
@@ -190,9 +274,16 @@ namespace Netflix_Analyzer
                     TextBox textBox = new TextBox();
                     textBox.Name = "tb" + item;
                     textBox.Location = textboxlocation;
-                    if (motion.Equals("update")&&item.Equals("id"))
+                    if (item.Equals("id") && (motion.Equals("update") || motion.Equals("delete")))
                     {
-                        textBox.Enabled = false;
+
+                        textBox.KeyDown += (o, e) =>
+                        {
+                            if (e.KeyCode == Keys.Enter)
+                            {
+                                RowFind();
+                            }
+                        };
                     }
                     textBox.Size = new Size(110, 21);
                     row++;
@@ -236,9 +327,9 @@ namespace Netflix_Analyzer
                 y = 113;
             }
             button.Text = butt;
-            button.Location = new Point(x,y);
+            button.Location = new Point(x, y);
             button.Size = new Size(88, 23);
-            button.Click += (e,a)=> { buttonAction(table); };
+            button.Click += (e, a) => { buttonAction(table); };
             groupBox1.Controls.Add(button);
             btnList.Add(button);
 
@@ -266,9 +357,10 @@ namespace Netflix_Analyzer
             }
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+        private void setTextBox()
         {
-            string table = (comboBox1.SelectedItem as dynamic).Display;
+            string table = currentTable;
             DataTable dt = new DataTable();
             switch (table)
             {
@@ -319,6 +411,10 @@ namespace Netflix_Analyzer
                     break;
             }
         }
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            setTextBox();
+        }
 
         private void buttonAction(string table)
         {
@@ -350,8 +446,8 @@ namespace Netflix_Analyzer
             }
             else
             {
-                data.Add ("id", txtList[0].Text);
-                data.Add ("name", txtList[1].Text);
+                data.Add("id", txtList[0].Text);
+                data.Add("name", txtList[1].Text);
             }
             if (motion.Equals("insert"))
             {
@@ -367,12 +463,39 @@ namespace Netflix_Analyzer
             }
             else
             {
-                DataManager.printLog("Data_Edit.Motion = "+ motion + " Error");
+                DataManager.printLog("Data_Edit.Motion = " + motion + " Error");
             }
             MessageBox.Show(contents);
             DataManager.LoadDT(table);
             form.dataGridViewSelectDT(table, ref dataGridView1, ref groupBox2);
 
+        }
+
+        private void insertToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            motion = "insert";
+            this.Text = "Data Edit (" + motion + ")";
+            string table = (comboBox1.SelectedItem as dynamic).Display;
+            int columnCount = (comboBox1.SelectedItem as dynamic).Value;
+            addTextBox(table, columnCount);
+        }
+
+        private void updateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            motion = "update";
+            this.Text = "Data Edit (" + motion + ")";
+            string table = (comboBox1.SelectedItem as dynamic).Display;
+            int columnCount = (comboBox1.SelectedItem as dynamic).Value;
+            addTextBox(table, columnCount);
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            motion = "delete";
+            this.Text = "Data Edit (" + motion + ")";
+            string table = (comboBox1.SelectedItem as dynamic).Display;
+            int columnCount = (comboBox1.SelectedItem as dynamic).Value;
+            addTextBox(table, columnCount);
         }
     }
 }

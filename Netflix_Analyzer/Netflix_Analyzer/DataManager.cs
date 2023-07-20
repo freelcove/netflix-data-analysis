@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Runtime.Remoting.Contexts;
+using System.Threading;
 
 namespace Netflix_Analyzer
 {
@@ -11,9 +13,12 @@ namespace Netflix_Analyzer
     {
         public static List<User> Users = new List<User>();
         public static List<Country> Countries = new List<Country>();
+        public static List<Country> CountriesSort = new List<Country>();
         public static List<Device> Devices = new List<Device>();
+        public static List<Device> DevicesSort = new List<Device>();
         public static List<Gender> Genders = new List<Gender>();
         public static List<Genre> Genres = new List<Genre>();
+        public static List<Genre> GenresSort = new List<Genre>();
         public static List<Subscription_Type> Subscription_Types = new List<Subscription_Type>();
         public static DataTable UsersDT = new DataTable();
         public static DataTable CountriesDT = new DataTable();
@@ -34,12 +39,32 @@ namespace Netflix_Analyzer
         {
             LoadDT();
             Load();
+            ListSort();
+        }
+
+        private static void ListSort() 
+        {
+            foreach(Country item in Countries )
+            {
+                CountriesSort.Add(item);
+            }
+            CountriesSort.Sort();
+            foreach(Device item in Devices)
+            {
+                DevicesSort.Add(item);
+            }
+            DevicesSort.Sort();
+            foreach(Genre item in Genres)
+            {
+                GenresSort.Add(item);
+            }
+            GenresSort.Sort();
         }
 
         //전체 테이블 불러오기(DT)
         public static void LoadDT()
         {
-            for(int i = 0; i<Tables.Count; i++)
+            for (int i = 0; i<Tables.Count; i++)
             {
                 ColumnCount[i] = DBHelper.countColumn(Tables[i]);
             }
