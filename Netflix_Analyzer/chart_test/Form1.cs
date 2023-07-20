@@ -38,15 +38,15 @@ namespace chart_test
             foreach (DataRow row in DBHelper.dt.Rows)
             {
                 string country = row["country"].ToString();
-                string subscriptionType = row["subscription_type"].ToString();
+                string subscription_type = row["subscription_type"].ToString();
                 int count = Convert.ToInt32(row["count"]);
 
                 // create a new series for each subscription type
-                var series = chart1.Series.FirstOrDefault(s => s.Name == subscriptionType);
+                var series = chart1.Series.FirstOrDefault(s => s.Name == subscription_type);
 
                 if (series == null)
                 {
-                    series = new Series(subscriptionType);
+                    series = new Series(subscription_type);
                     series.ChartType = SeriesChartType.Column;
                     chart1.Series.Add(series);
                 }

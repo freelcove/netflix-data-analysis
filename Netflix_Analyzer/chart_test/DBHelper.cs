@@ -64,25 +64,26 @@ namespace chart_test
 
                 // Select the top 10 countries by GDP per capita, excluding China and Russia, and group by subscription type
                 cmd.CommandText = @"
-        WITH subscription_counts AS (
-            SELECT
-                c.name AS country,
-                u.subscription_type,
-                COUNT(*) AS count
-            FROM users u
-            JOIN countries c ON u.country = c.id
-            WHERE c.name NOT IN ('China', 'Russia')
-            GROUP BY c.name, u.subscription_type
-        )
-        SELECT *
+WITH subscription_counts AS (
+        SELECT
+            c.name AS country,
+            s.name AS subscription_type,
+            COUNT(*) AS count
+        FROM users u
+        JOIN countries c ON u.country = c.id
+        JOIN subscription_types s ON u.subscription_type = s.id
+        WHERE c.name NOT IN ('China', 'Russia')
+        GROUP BY c.name, s.name
+    )
+    SELECT *
+    FROM subscription_counts
+    WHERE country IN (
+        SELECT TOP 10 country
         FROM subscription_counts
-        WHERE country IN (
-            SELECT TOP 10 country
-            FROM subscription_counts
-            GROUP BY country
-            ORDER BY SUM(count) DESC
-        )
-        ORDER BY count DESC
+        GROUP BY country
+        ORDER BY SUM(count) DESC
+    )
+    ORDER BY count DESC
     ";
 
                 da = new SqlDataAdapter(cmd);
