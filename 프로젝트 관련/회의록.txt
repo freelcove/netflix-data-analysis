@@ -1,0 +1,27 @@
+07-13-2023
+
+프로젝트명: Netflix Data Analysis
+
+Github: https://github.com/freelcove/netflix-data-analysis
+
+- 넷플릭스 유저 1억 명 가상 데이터를 생성.
+    - 실제 데이터는 구할 수 없음.
+    - 기존의 다양한 통계 자료를 바탕으로 “mock data”를 만듬.
+    - subscription_type, country, gender, average_watch_time, preferred_genre, birth_date, join_date, last_payment_date, device
+    - Python 라이브러리 이용.
+- 분석 및 시각화.
+    - 구독 타입, 국가, 성별, 일일 평균 시청시간, 선호 장르, 나이, 구독 취소 여부, 선호 디바이스 + 국가별 인구수, 지역, GDP, 1인당 GDP.
+    - 다양한 속성들 간 상관 관계를 분석 및 시각화 하는 프로그램 제작 가능.
+    
+
+07-14-2023
+
+- 데이터 수정 및 입력
+- C# winforms 프로그램
+- 데이터 명세서
+
+07-26-2023
+
+- 차트 보기 탭 추가.
+- ppt
+- 요구사항 정의서
