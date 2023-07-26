@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Netflix_Analyzer
 {
@@ -39,19 +34,15 @@ namespace Netflix_Analyzer
         {
             cmbList.Clear();
 
-            for (int i = 0; i < DataManager.Tables.Count; i++)
-            {
-                cmbList.Add(new { Display = "나라별 구독등급별 가입자 수 (TOP 10 Country)", Value = @"
+
+            cmbList.Add(new { Display = "나라별 구독등급별 가입자 수 (TOP 10 Country)", Value = @"
 WITH subscription_counts AS (
         SELECT
-            c.name AS country,
-            s.name AS subscription_type,
+            country,
+            subscription_type,
             COUNT(*) AS count
-        FROM users u
-        JOIN countries c ON u.country = c.id
-        JOIN subscription_types s ON u.subscription_type = s.id
-        WHERE c.name NOT IN ('China', 'Russia')
-        GROUP BY c.name, s.name
+        FROM usersView
+        GROUP BY country, subscription_type
     )
     SELECT *
     FROM subscription_counts
@@ -63,7 +54,7 @@ WITH subscription_counts AS (
     )
     ORDER BY count DESC
     " });
-            }
+
         }
 
         private void button1_Click(object sender, EventArgs e)
