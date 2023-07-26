@@ -144,6 +144,21 @@ namespace Netflix_Analyzer
         }
 
 
+        public static void LoadAnalyzerDT(string query)
+        {
+            try
+            {
+
+                DBHelper.AnalyzerDT(query);
+
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message);
+                printLog(e.StackTrace + "LoadAnalyzerDT");
+            }
+        }
+
         //Users 테이블 데이터 불러오기(DT)
         private static void LoadUsersDT(int selectId = -1, string filter = "=")
         {

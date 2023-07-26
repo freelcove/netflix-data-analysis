@@ -233,6 +233,10 @@ namespace Netflix_Analyzer
             }
         }
 
-
+        private void analyzerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Analyzer analyzer = new Analyzer();
+            analyzer.ShowDialog();
+        }
     }
 }

@@ -94,6 +94,33 @@ namespace Netflix_Analyzer
             }
         }
 
+        public static DataTable AnalyzerDT(string query)
+        {
+            try
+            {
+                dt = new DataTable();
+                string connect = string.Format("Data Source={0}; Initial Catalog = {1}; Persist Security Info = True; User ID=user1;Password=1234", "192.168.0.104,1433", "Csharp_Team");
+                conn = new SqlConnection(connect);
+                conn.Open();
+
+                adapter = new SqlDataAdapter(query, conn);
+
+                adapter.Fill(dt);
+                return dt;
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("AnalyzerDT 오류");
+                DataManager.printLog("AnalyzerDT," + ex.Message + "," + ex.StackTrace);
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
         public static void insertQuery(string table, Dictionary<string, object> data)
         {
             try

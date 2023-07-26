@@ -155,6 +155,7 @@
             this.analyzerToolStripMenuItem.Name = "analyzerToolStripMenuItem";
             this.analyzerToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.analyzerToolStripMenuItem.Text = "Analyzer";
+            this.analyzerToolStripMenuItem.Click += new System.EventHandler(this.analyzerToolStripMenuItem_Click);
             // 
             // Form1
             // 
