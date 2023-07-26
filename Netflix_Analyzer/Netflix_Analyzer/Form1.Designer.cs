@@ -49,17 +49,19 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 35);
+            this.label1.Location = new System.Drawing.Point(21, 73);
+            this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 12);
+            this.label1.Size = new System.Drawing.Size(66, 25);
             this.label1.TabIndex = 1;
             this.label1.Text = "Table";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(185, 32);
+            this.button1.Location = new System.Drawing.Point(317, 67);
+            this.button1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(129, 48);
             this.button1.TabIndex = 2;
             this.button1.Text = "조회";
             this.button1.UseVisualStyleBackColor = true;
@@ -68,9 +70,11 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.dataGridView1);
-            this.groupBox1.Location = new System.Drawing.Point(14, 61);
+            this.groupBox1.Location = new System.Drawing.Point(24, 127);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(773, 354);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox1.Size = new System.Drawing.Size(1325, 738);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
@@ -80,46 +84,54 @@
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(7, 21);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 44);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersWidth = 82;
             this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(760, 327);
+            this.dataGridView1.Size = new System.Drawing.Size(1303, 681);
             this.dataGridView1.TabIndex = 0;
             // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(55, 33);
+            this.comboBox1.Location = new System.Drawing.Point(94, 69);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 20);
+            this.comboBox1.Size = new System.Drawing.Size(205, 33);
             this.comboBox1.TabIndex = 7;
             // 
             // groupBox2
             // 
-            this.groupBox2.Location = new System.Drawing.Point(14, 406);
+            this.groupBox2.Location = new System.Drawing.Point(24, 846);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(773, 54);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox2.Size = new System.Drawing.Size(1325, 112);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             // 
             // menuStrip1
             // 
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.homeToolStripMenuItem,
             this.dataEditToolStripMenuItem,
             this.analyzerToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(10, 4, 0, 4);
+            this.menuStrip1.Size = new System.Drawing.Size(2774, 96);
             this.menuStrip1.TabIndex = 9;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // homeToolStripMenuItem
             // 
             this.homeToolStripMenuItem.Name = "homeToolStripMenuItem";
-            this.homeToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.homeToolStripMenuItem.Size = new System.Drawing.Size(99, 88);
             this.homeToolStripMenuItem.Text = "Home";
             // 
             // dataEditToolStripMenuItem
@@ -129,39 +141,39 @@
             this.updateToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.dataEditToolStripMenuItem.Name = "dataEditToolStripMenuItem";
-            this.dataEditToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
+            this.dataEditToolStripMenuItem.Size = new System.Drawing.Size(131, 88);
             this.dataEditToolStripMenuItem.Text = "Data Edit";
             // 
             // insertToolStripMenuItem
             // 
             this.insertToolStripMenuItem.Name = "insertToolStripMenuItem";
-            this.insertToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.insertToolStripMenuItem.Size = new System.Drawing.Size(225, 44);
             this.insertToolStripMenuItem.Text = "Insert";
             // 
             // updateToolStripMenuItem
             // 
             this.updateToolStripMenuItem.Name = "updateToolStripMenuItem";
-            this.updateToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.updateToolStripMenuItem.Size = new System.Drawing.Size(225, 44);
             this.updateToolStripMenuItem.Text = "Update";
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(225, 44);
             this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // analyzerToolStripMenuItem
             // 
             this.analyzerToolStripMenuItem.Name = "analyzerToolStripMenuItem";
-            this.analyzerToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.analyzerToolStripMenuItem.Size = new System.Drawing.Size(126, 88);
             this.analyzerToolStripMenuItem.Text = "Analyzer";
             this.analyzerToolStripMenuItem.Click += new System.EventHandler(this.analyzerToolStripMenuItem_Click);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 483);
+            this.ClientSize = new System.Drawing.Size(1387, 964);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.groupBox1);
@@ -169,6 +181,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Netflix Analyzer";
