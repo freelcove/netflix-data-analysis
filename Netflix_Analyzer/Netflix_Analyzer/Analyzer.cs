@@ -34,25 +34,25 @@ namespace Netflix_Analyzer
         {
             cmbList.Clear();
 
-
+            //x축 => List, Series => SubList, y축 => Value로 
             cmbList.Add(new { Display = "나라별 구독등급별 가입자 수 (TOP 10 Country)", Value = @"
 WITH subscription_counts AS (
         SELECT
-            country,
-            subscription_type,
-            COUNT(*) AS count
+            country as List,
+            subscription_type as SubList,
+            COUNT(*) AS Value
         FROM usersView
         GROUP BY country, subscription_type
     )
     SELECT *
     FROM subscription_counts
-    WHERE country IN (
-        SELECT TOP 10 country
+    WHERE List IN (
+        SELECT TOP 10 List
         FROM subscription_counts
-        GROUP BY country
-        ORDER BY SUM(count) DESC
+        GROUP BY List
+        ORDER BY SUM(Value) DESC
     )
-    ORDER BY count DESC
+    ORDER BY Value DESC
     " });
 
         }
@@ -65,21 +65,21 @@ WITH subscription_counts AS (
             chart1.Series.Clear();
             foreach (DataRow row in DBHelper.dt.Rows)
             {
-                string country = row["country"].ToString();
-                string subscription_type = row["subscription_type"].ToString();
-                int count = Convert.ToInt32(row["count"]);
+                string List = row["List"].ToString();
+                string SubList = row["SubList"].ToString();
+                int Value = Convert.ToInt32(row["Value"]);
 
                 // create a new series for each subscription type
-                var series = chart1.Series.FirstOrDefault(s => s.Name == subscription_type);
+                var series = chart1.Series.FirstOrDefault(s => s.Name == SubList);
 
                 if (series == null)
                 {
-                    series = new Series(subscription_type);
+                    series = new Series(SubList);
                     series.ChartType = SeriesChartType.Column;
                     chart1.Series.Add(series);
                 }
 
-                series.Points.AddXY(country, count);
+                series.Points.AddXY(List, Value);
             }
         }
     }
