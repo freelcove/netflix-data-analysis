@@ -57,52 +57,52 @@ WITH subscription_counts AS (
 
             cmbList.Add(new { Display = "성별 및 선호 장르별 사용자 수", Value = @"
 SELECT
-    g.name as List,
-    gen.name as SubList,
+    gender as List,
+    genre as SubList,
     COUNT(*) AS Value
-FROM users u
-JOIN genders g ON u.gender = g.id
-JOIN genres gen ON u.preferred_genre = gen.id
-GROUP BY g.name, gen.name
+FROM usersview
+GROUP BY gender, genre
 ORDER BY Value DESC
 " });
+
+
             cmbList.Add(new { Display = "장치별 사용자 수", Value = @"
 SELECT
-    d.name as List,
+    device as List,
     COUNT(*) AS Value
-FROM users u
-JOIN devices d ON u.device = d.id
-GROUP BY d.name
+FROM usersview
+GROUP BY device
 ORDER BY Value DESC
 " });
+
+
             cmbList.Add(new { Display = "구독 유형별 사용자 수", Value = @"
 SELECT
-    s.name as List,
+    subscription_type as List,
     COUNT(*) AS Value
-FROM users u
-JOIN subscription_types s ON u.subscription_type = s.id
-GROUP BY s.name
+FROM usersview
+GROUP BY subscription_type
 ORDER BY Value DESC
 " });
+
+
             cmbList.Add(new { Display = "장르별 사용자 수", Value = @"
 SELECT
-    g.name as List,
+    genre as List,
     COUNT(*) AS Value
-FROM users u
-JOIN genres g ON u.preferred_genre = g.id
-GROUP BY g.name
+FROM usersview
+GROUP BY genre
 ORDER BY Value DESC
 " });
         
+
             cmbList.Add(new { Display = "장치별 선호 장르", Value = @"
 SELECT
-    d.name as List,
-    g.name as SubList,
+    device as List,
+    genre as SubList,
     COUNT(*) AS Value
-FROM users u
-JOIN devices d ON u.device = d.id
-JOIN genres g ON u.preferred_genre = g.id
-GROUP BY d.name, g.name
+FROM usersview
+GROUP BY device, genre
 ORDER BY Value DESC
 " });
 
