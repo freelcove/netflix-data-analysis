@@ -439,7 +439,7 @@ namespace Netflix_Analyzer
                 data.Add("country", (cmbList[1].SelectedItem as dynamic).Value);
                 data.Add("gender", (cmbList[2].SelectedItem as dynamic).Value);
                 data.Add("device", (cmbList[3].SelectedItem as dynamic).Value);
-                data.Add("preferred_genre", cmbList[4].SelectedValue);
+                data.Add("preferred_genre", (cmbList[4].SelectedItem as dynamic).Value);
                 data.Add("join_date", dateList[0].Value);
                 data.Add("last_payment_date", dateList[1].Value);
                 data.Add("birth_date", dateList[2].Value);
